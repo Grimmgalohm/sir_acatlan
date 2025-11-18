@@ -1,0 +1,50 @@
+# ───────────────────────────────
+# Emacs backup & autosave files
+# ───────────────────────────────
+
+# Archivos de respaldo: file.txt~
+*~
+
+# Archivos de autosave: #file.txt#
+\#*\#
+
+# Archivos de bloqueo (cuando un buffer está abierto)
+.#*
+
+# ───────────────────────────────
+# Archivos de Emacs/paquetes locales
+# ───────────────────────────────
+
+# Directorio .emacs.d de usuario (NO en proyectos)
+.emacs.d/
+elpa/
+eln-cache/
+
+# Archivos compilados de Emacs Lisp
+*.elc
+
+# Directorios de cache internos
+auto-save-list/
+eshell/
+tramp/
+transient/
+bookmark
+
+# Archivos de agenda de org mode generados temporalmente
+*.org_archive
+
+# ───────────────────────────────
+# Archivos temporales del sistema
+# ───────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ───────────────────────────────
+# Archivos temporales de compilación o ejecución
+# (opcional para proyectos con build)
+# ───────────────────────────────
+*.log
+*.tmp
+*.swp
+*.swo
+*.lock

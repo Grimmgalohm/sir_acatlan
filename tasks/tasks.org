@@ -1,0 +1,9 @@
+* TODO Aplicar estilos al menú principal y al formulario de registro de incidencia
+  SCHEDULED: <2025-11-14>
+
+* TODO Crear las siguientes vistas
+  - [] Dashboard de gestion de reportes
+  - [] Dashboard de métricas
+  - [] Form de login para administradores
+
+* TODO Leer el documento de requerimientos del proyecto
