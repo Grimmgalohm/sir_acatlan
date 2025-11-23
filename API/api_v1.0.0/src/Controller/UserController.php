@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller;
 
 use App\Core\Request;
@@ -8,7 +7,7 @@ use App\Service\UserService;
 
 class UserController {
 
-  public function __construct(private UserService $userService) {}
+  public function __construct(private UserService $userService){}
 
   public function register(Request $request): void {
 

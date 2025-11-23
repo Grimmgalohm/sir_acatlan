@@ -1,0 +1,9 @@
+{
+    "_comment": "Para ver la documentación de composer: https://www.php.net/manual/en/install.composer.intro.php. Esta está mejor: https://getcomposer.org/doc/00-intro.md. Básicamente estamos pidiendo que cargue automáticamente src cuando se refieran a App, mapeando las carpetas. El estandar psr-4 le dice a composer que si busca App, busque en src",
+    "autoload": {
+	"psr-4": {
+	    "App\\": "src/"
+	}
+    }
+
+}

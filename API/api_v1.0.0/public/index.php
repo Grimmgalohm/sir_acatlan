@@ -1,6 +1,4 @@
 <?php
-//Silence is golden
-
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Core\Request;
@@ -23,9 +21,10 @@ if($request->getPath() === 'api/register' && $request->getMethod() === 'POST') {
   $controller->register($request);
 
 } else {
-
-  echo json_encode(['Error'=> 'Ruta no encontrada', 404])
-
+    echo json_encode(['Error'=> 'Ruta no encontrada', 404]);
 }
+
+
+
 
 ?>

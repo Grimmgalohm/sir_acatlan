@@ -48,3 +48,10 @@ Thumbs.db
 *.swp
 *.swo
 *.lock
+
+
+# -------------------------------
+# Archivos de configuración de ambiente
+# (todos los .env, excepto .env.example)
+# -------------------------------
+*.env

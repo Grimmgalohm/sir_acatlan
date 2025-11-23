@@ -1,5 +1,4 @@
- <?php
-
+<?php
 namespace App\Core;
 
 class Container {
@@ -25,7 +24,7 @@ class Container {
   */
   public function get(string $key) {
     // 1. Si no tenemos la receta, error
-    if (!array_key_exists($key, $this->bindigs)) {
+    if (!array_key_exists($key, $this->bindings)) {
       throw new \Exception("No se encontró el servicio para: $key");
     }
     // 2. Si ya creamos el objeto antes, devuélvelo (ahorra memoria)
