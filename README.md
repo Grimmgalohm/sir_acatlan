@@ -154,3 +154,30 @@ docker-compose up -d
 npm run test:unit
 npm run test:e2e
 npm run test:unit
+
+## Notas
+Sobre la base de datos.
+- Recordar siempre usar el charset y el collate indicados
+```SQL
+DEFAULT CHARACTER SET utf8mb4
+DEFAULT COLLATE utf8mb4_0900_ai_ci;
+```
+
+- SIEMPRE usar `INNODB` como motor por defecto
+
+```
+SET default_storage_engine = INNODB;
+```
+
+- En las tablas, al final, agregar también
+```
+CREATE TABLE xxxx(
+
+)
+ENGINE=InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_spanish_ci;
+```
+
+- La fecha está guardada en UTC (timestamp/datetime). Se usa en todas (America/Mexico_City)
+- tablas SIEMPRE en snake_case
