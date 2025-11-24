@@ -6,18 +6,18 @@
 */
 
 
-$host = getenv('DB_HOST');
-$db = getenv('DB_NAME');
-$port = getenv('DB_PORT');
-$user = getenv('DB_USER');
-$pass = getenv('DB_PASS');
-$charset = getenv('DB_CHARSET');
+$host = $_ENV['DB_HOST'] ?? '';
+$db = $_ENV['DB_NAME'] ?? '';
+$port = $_ENV['DB_PORT'] ?? 3306;
+$user = $_ENV['DB_USER'] ?? '';
+$pass = $_ENV['DB_PASS'] ?? '';
+$charset = $_ENV['DB_CHARSET'] ?? 'utf8mb4';
 
 /**
 *  Data Source Name
 *  URL: https://www.php.net/manual/en/ref.pdo-mysql.connection.php
 */
-$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
+$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
 
 /**
 * Options for PDO

@@ -9,10 +9,6 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Controller\UserController;
 
-// Cargar ev desde el archivo
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../'); // Apunta a la raíz
-$dotenv->safeLoad();
-
 // 1. Cargar Contenedor
 $container = require __DIR__ . '/../config/bootstrap.php';
 

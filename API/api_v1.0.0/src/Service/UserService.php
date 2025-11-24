@@ -23,11 +23,11 @@ class UserService {
     // 4. Persistencia (delegada al repo)
     $created = $this->userRepository->create($input['name'],$input['email'],$hash);
 
-    if($created) {
+    if(!$created) {
       throw new \Exception("Error al guardar el usuario");
     }
 
-    return ['status' => 'sucess', 'message' => 'Usuario creado'];
+    return ['status' => 'success', 'message' => 'Usuario creado'];
 
   }
 }
