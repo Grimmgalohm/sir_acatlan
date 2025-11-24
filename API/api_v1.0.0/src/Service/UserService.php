@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Service;
 
 class UserService {
@@ -9,7 +8,7 @@ class UserService {
   public function registerNewUser(array $input): array {
 
     // 1. Lógica de validación (Regla de negocio) 
-    if(empty($input['email]) || !filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+    if(empty($input['email']) || !filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
       throw new \InvalidArgumentException("Email inválido");
     }
     

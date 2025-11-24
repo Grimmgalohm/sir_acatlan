@@ -1,30 +1,47 @@
 <?php
+// Desactivar warnings visuales en producción, pero útil verlos ahora
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Core\Request;
-use App\Core\Router;
+use App\Core\Response;
 use App\Controller\UserController;
 
-// 1. Cargamos el contenedor ya configurado
+// 1. Cargar Contenedor
 $container = require __DIR__ . '/../config/bootstrap.php';
 
-// 2. Inicializamos Router y Request
-$router = new Router();
+// 2. Inicializar Request
 $request = new Request();
+$path = $request->getPath();
+$method = $request->getMethod();
 
-// 3. Enrutamiento
-if($request->getPath() === 'api/register' && $request->getMethod() === 'POST') {
+// 3. Router Simple (Switch)
+try {
+    switch ($path) {
+        
+        case '/api/register':
+            if ($method === 'POST') {
+                /** @var UserController $controller */
+                $controller = $container->get(UserController::class);
+                $controller->register($request);
+            } else {
+                Response::json(['error' => 'Método no permitido'], 405);
+            }
+            break;
 
-  // Le pedimos al contenedor el controlador listo para usar
-  // El contenedor creará PDO -> Repo -> Service -> Controller automáticamente
-  $controller = $container->get(UserController::class);
-  $controller->register($request);
+        case '/api/status':
+            Response::json(['status' => 'API Online', 'time' => time()]);
+            break;
 
-} else {
-    echo json_encode(['Error'=> 'Ruta no encontrada', 404]);
+        default:
+            Response::json(['error' => 'Ruta no encontrada'], 404);
+            break;
+    }
+
+} catch (\Exception $e) {
+    Response::json(['error' => 'Error interno del servidor: ' . $e->getMessage()], 500);
 }
-
-
-
 
 ?>

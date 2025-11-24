@@ -10,7 +10,6 @@ class UserController {
   public function __construct(private UserService $userService){}
 
   public function register(Request $request): void {
-
     try {
 
       // Obtiene datos  del body (JSON)
@@ -20,7 +19,7 @@ class UserController {
       $result = $this->userService->registerNewUser($data);
 
       //Envía respuesta exitosa (201 Created)
-      Response::json(result, 201);
+      Response::json($result, 201);
 
     } catch (\InvalidArgumentException $e) {
 
@@ -32,9 +31,7 @@ class UserController {
       Response::json(['error'=>$e->getMessage()], 500);
 
     }
-
   }
-
 }
 
 ?>

@@ -1,14 +1,14 @@
 <?php
-
 namespace App\Repository;
+
 use PDO;
 use App\Model\User;
 
-class UserRepository{
+class UserRepository {
 
-  public function __construct(private PDO $db){}
-
-  public function findByEmail(string $email): ?User {
+    public function __construct(private PDO $db){}
+        
+    public function findByEmail(string $email): ?User {
 
     $stmt = $this->db->prepare("SELECT id, name, email FROM users WHERE email = :email ");
     $stmt->bindValue(':email', $email);
@@ -22,8 +22,7 @@ class UserRepository{
       return null;
 
     }
-
-
+    
     return new User(
       $data['id'],
       $data['name'],
@@ -35,8 +34,10 @@ class UserRepository{
   public function create(string $name, string $email, string $passwordHash): bool{
     $stmt = $this->db->prepare("INSERT INTO users(name, email, password) VALUES(:name, :email, :pass)");
     $stmt->bindValue(':name', $name);
-    $stmt->bindValue(':email', $name);
-    %stmt->bindValue(':pass', $name);
+    $stmt->bindValue(':email', $email);
+    $stmt->bindValue(':pass', $passwordHash);
+
+    return $stmt->execute();
   }
 
 }

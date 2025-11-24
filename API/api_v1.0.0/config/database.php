@@ -7,11 +7,11 @@
 */
 
 
-$host = getenv(DB_HOST);
-$db = getenv(DB_NAME);
-$user = getenv(DB_USER);
-$pass = getenv(DB_PASS);
-$charset = getenv(DB_CHARSET);
+$host = getenv('DB_HOST');
+$db = getenv('DB_NAME');
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASS');
+$charset = getenv('DB_CHARSET');
 
 /**
 *  Data Source Name
@@ -37,7 +37,7 @@ try{
 
 } catch(\PDOException $e) {
 
-  erro_log($e->getMessage());
+  error_log($e->getMessage());
   exit('Something went wrong connecting to db... See Logs for more info.');
 
 }

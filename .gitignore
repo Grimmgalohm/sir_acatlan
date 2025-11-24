@@ -1,57 +1,148 @@
-# ───────────────────────────────
-# Emacs backup & autosave files
-# ───────────────────────────────
+###############################################
+# ARCHIVOS SENSIBLES
+###############################################
+.env
+.env.*
+!.env.example
 
-# Archivos de respaldo: file.txt~
-*~
+###############################################
+# COMPOSER
+###############################################
+vendor/
+composer.phar
+composer.lock
 
-# Archivos de autosave: #file.txt#
-\#*\#
+###############################################
+# CACHE / LOGS (CUALQUIER LUGAR)
+###############################################
+**/cache/
+**/logs/
+**/*.log
+**/*.cache
+**/*.tmp
+**/*.temp
 
-# Archivos de bloqueo (cuando un buffer está abierto)
-.#*
-
-# ───────────────────────────────
-# Archivos de Emacs/paquetes locales
-# ───────────────────────────────
-
-# Directorio .emacs.d de usuario (NO en proyectos)
-.emacs.d/
-elpa/
-eln-cache/
-
-# Archivos compilados de Emacs Lisp
-*.elc
-
-# Directorios de cache internos
-auto-save-list/
-eshell/
-tramp/
-transient/
-bookmark
-
-# Archivos de agenda de org mode generados temporalmente
-*.org_archive
-
-# ───────────────────────────────
-# Archivos temporales del sistema
-# ───────────────────────────────
+###############################################
+# ARCHIVOS TEMPORALES DEL SISTEMA
+###############################################
+# macOS
 .DS_Store
+__MACOSX/
+
+# Windows
+desktop.ini
 Thumbs.db
 
-# ───────────────────────────────
-# Archivos temporales de compilación o ejecución
-# (opcional para proyectos con build)
-# ───────────────────────────────
-*.log
-*.tmp
-*.swp
-*.swo
-*.lock
+# Linux / NFS
+.nfs*
 
+###############################################
+# EDITORES / IDEs
+###############################################
+# VSCode
+.vscode/
+*.code-workspace
 
-# -------------------------------
-# Archivos de configuración de ambiente
-# (todos los .env, excepto .env.example)
-# -------------------------------
-*.env
+# PhpStorm
+.idea/
+*.iml
+
+###############################################
+# EMACS — ARCHIVOS TEMPORALES, BACKUPS, LOCKFILES, ETC.
+###############################################
+
+# Backups (~)
+*~
+
+# Auto-save (#archivo#)
+\#*\#
+
+# Lockfiles
+*.lock~
+
+# Tramp (remote editing)
+.tramp
+
+# Byte-compiled Lisp
+*.elc
+
+# Desktop sessions
+**/.emacs.desktop
+**/.emacs.desktop.lock
+
+# Auto-save lists
+**/auto-save-list/
+
+# Org-mode metadata
+**/.org-id-locations
+**/.org-agenda.lock
+
+# Transient state (Magit, etc.)
+**/transient/history/
+**/transient/state/
+
+# URL cache
+**/url/cache/
+
+# esh-help
+**/esh-help/
+
+# Projectile
+.projectile
+
+###############################################
+# TREE-SITTER (archivos generados o compilados)
+###############################################
+# Árboles almacenados en caché por Emacs
+**/tree-sitter/**
+**/tree-sitter-cache/**
+**/.ts-cache/
+
+# Archivos binarios generados por grammars
+*.so
+*.dylib
+*.dll
+*.wasm
+*.bundle
+
+###############################################
+# AUCTeX (LaTeX temporales, aux, logs, etc.)
+###############################################
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.out
+*.toc
+*.bbl
+*.blg
+*.brf
+*.ilg
+*.ind
+*.idx
+*.maf
+*.mtc*
+*.nav
+*.snm
+*.vrb
+*.xdv
+*.pdfsync
+
+# Directorios temporales de TeX
+**/_minted*/
+**/texput.log
+**/latex.out/
+**/latex.cache/
+
+###############################################
+# TESTS / COVERAGE
+###############################################
+coverage/
+.phpunit.result.cache
+
+###############################################
+# BUILDS / ARTIFACTOS
+###############################################
+build/
+dist/
+node_modules/
