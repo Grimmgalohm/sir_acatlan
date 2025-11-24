@@ -7,3 +7,9 @@
   - [] Form de login para administradores
 
 * DONE Leer el documento de requerimientos del proyecto
+* TODO Crear los archivos para retornar el catalogo de reportes
+* TODO Terminar la vista de reportes (con los catalogos hardcoded)
+* TODO Crear una llamada XMLHttpRequest() para traer el catalogo a la vista de reportes
+* TODO Revisar con Miguel el catalogo de reportes y la estructura de la base de datos
+* TODO Crear el endpoint para la carga de los reportes (con subida de imágenes)
+* TODO Investigar la configuración necesaria para que se tome el SPA como PWA en móvil
