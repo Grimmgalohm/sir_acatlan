@@ -32,7 +32,7 @@ class UserRepository {
   }
 
   public function create(string $name, string $email, string $passwordHash): bool{
-    $stmt = $this->db->prepare("INSERT INTO users(name, email, password) VALUES(:name, :email, :pass)");
+    $stmt = $this->db->prepare("INSERT INTO users(name, email, pass) VALUES(:name, :email, :pass)");
     $stmt->bindValue(':name', $name);
     $stmt->bindValue(':email', $email);
     $stmt->bindValue(':pass', $passwordHash);

@@ -1,6 +1,8 @@
 <?php
 namespace App\Service;
 
+use App\Repository\UserRepository;
+
 class UserService {
   //El servicio necesita al repositorio para funcionar
   public function __construct(private UserRepository $userRepository){}
