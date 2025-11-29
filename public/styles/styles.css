@@ -95,7 +95,6 @@ header{
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 1.5rem;
-    background: var(--primary-color);
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
@@ -104,31 +103,6 @@ header{
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--terciary-color);
-}
-
-.primary-button{
-    background: var(--secondary-color);
-    color: var(--terciary-color);
-    border: none;
-    padding: 0.7rem 1.4rem;
-    border-radius: 8px;              /* mismo radio que tu card */
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.primary-button:hover {
-  background: var(--on-hover-secondary);             /* tono más suave del azul */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-}
-.primary-button:active {
-  background: var(--on-active-secondary);
-  transform: scale(0.97);
 }
 
 .input-primary {
@@ -160,4 +134,154 @@ footer{
     line-height: .5;
     height: 10vh;
     width: 100vw;
+}
+
+/* ========= RESETEO SUAVE ========= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ========= FORMULARIO ========= */
+
+form {
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--color-card-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* FIELDSETS COMO “CARDS” */
+fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  margin: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-size: 0.95rem;
+}
+
+/* ETIQUETAS EN COLUMNA */
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* SELECTS, TEXTAREA, INPUTS TEXTO (GENÉRICO) */
+select,
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"] {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--color-text);
+  background-color: #f9fafb;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+select:focus,
+textarea:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(27, 61, 112, 0.15);
+}
+
+/* TEXTAREA */
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* INPUT FILE (LIMITADO PERO UN POCO MÁS BONITO) */
+input[type="file"] {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* ========= BOTONES (REUSABLES) ========= */
+
+button,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: none;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.08s ease;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+}
+
+button:hover,
+.btn:hover {
+  background-color: var(--on-hover-primary);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.22);
+}
+
+button:active,
+.btn:active {
+  background-color: var(--on-active-primary);
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.18);
+}
+
+button:disabled,
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ========= LAYOUT RESPONSIVE ========= */
+
+/* En pantallas grandes, acomoda los selects en dos columnas si se quiere más compacto */
+@media (min-width: 640px) {
+  fieldset:first-of-type {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  fieldset:first-of-type > label:nth-child(2) {
+    grid-column: span 2; /* “Selecciona el tipo de incidente” a lo ancho */
+  }
+}
+
+/* Centrar botón al final */
+form > button:last-of-type {
+  align-self: flex-end;
+  margin-top: 0.5rem;
 }

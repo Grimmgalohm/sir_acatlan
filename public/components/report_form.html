@@ -1,12 +1,41 @@
 <form>
   <fieldset><legend>Reportar incidente</legend>
-    <label>Selecciona el tipo de inicidente:</label>
-    <datalist id="options">
-      <option value="1">Inscribirme a Better Software</option>
-      <option value="2">Contratarte</option>
-      <option value="3">Ofrecerte algo</option>
-    </datalist>
-    <input list="options" name="options">
-    <button>Enviar reporte</button>
+    
+    <label>Selecciona el tipo de inicidente:
+      <select id="type_incident">
+	<option disabled selected value> -- select an option -- </option>
+	<option value="1">Baño sucio</option>
+	<option value="2">Sin papel</option>
+	<option value="3">Sin jabón</option>
+	<option value="4">Baño cerrado</option>
+      </select>
+    </label>
+
+    <label>Selecciona el edificio
+      <select>
+	<option disabled selected value> -- select an option -- </option>
+	<option value="1">A1</option>
+	<option value="2">A2</option>
+	<option value="3">A3</option>
+      </select>
+    </label>
+
+    <label>Selecciona el baño
+      <select>
+	<option disabled selected value> -- Selecciona una opción -- </option>
+	<option value="1">Hombres</option>
+	<option value="2">Mujeres</option>
+	<option value="3">Mixto</option>
+      </select>
+    </label>
   </fieldset>
+  
+  <br>
+  <fieldset>
+    <input type="file" accept="image/*" capture="enviroment">
+    <label>Agrega un comentario
+      <textarea></textarea>
+    </label>
+  </fieldset>
+    <button>Enviar reporte</button>
 </form>
