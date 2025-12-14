@@ -145,3 +145,80 @@ Resumen:
 3. Container arma todo → Controller + Service + Repo + PDO.
 4. Ejecución → El código fluye hacia abajo (Controller -> Service -> Repo -> DB).
 5. Respuesta → El resultado sube y Response::json lo envía al usuario.
+
+## ✅ Checklist para agregar una nueva ruta (Sin fallar en el intento)
+
+Sigue este orden estricto para implementar una nueva funcionalidad (ej. `Reports`):
+
+1.  [ ] **Nivel Base (Model)**: Crea `src/Model/Report.php`. Define propiedades públicas y constructor.
+2.  [ ] **Nivel Datos (Repository)**: Crea `src/Repository/ReportRepository.php`.
+    *   [ ] Inyecta `PDO` en el constructor.
+    *   [ ] Crea métodos SQL (`save`, `findById`, etc.).
+3.  [ ] **Nivel Lógica (Service)**: Crea `src/Service/ReportService.php`.
+    *   [ ] Inyecta `ReportRepository` en el constructor.
+    *   [ ] Agrega validaciones y lógica de negocio.
+4.  [ ] **Nivel HTTP (Controller)**: Crea `src/Controller/ReportController.php`.
+    *   [ ] Inyecta `ReportService` en el constructor.
+    *   [ ] Crea métodos que reciban `Request` y retornen `Response::json`.
+5.  [ ] **Wiring (Bootstrap)**: Edita `config/bootstrap.php`.
+    *   [ ] Registra `ReportRepository` (pasa `PDO`).
+    *   [ ] Registra `ReportService` (pasa `ReportRepository`).
+    *   [ ] Registra `ReportController` (pasa `ReportService`).
+6.  [ ] **Routing (Index)**: Edita `public/index.php`.
+    *   [ ] Agrega un nuevo `case '/api/reports':` dentro del switch.
+    *   [ ] Obtén el controlador desde el container: `$container->get(ReportController::class)`.
+    *   [ ] Llama al método según el verbo HTTP (`POST`, `GET`, etc.).
+
+## Base de datos... (ptm)
+Dado que al final nadie me pasó los catalogos de baños en la FES, me voy a inventar el cómo funciona para este MVP la relación de las bases de datos.
+¿Cuáles son los datos? Bueno, creo que vamos a ir desmenuzandolos poco a poco.
+
+1. Catalogos
+   - Baños
+   - Edificios
+   - Zonas
+   - categoria de incidencia
+   - estado del incidente
+   - estado de la asignación (nuevo, asignado... para admnins o tracking de folio)
+   - resultado de la asignación
+
+2. Identidad y permisos
+   - usuarios
+   - roles
+   - relacion de usuarios v roles
+   - zona del agente (?) si se llega a implementar... no c.
+
+3. Operación
+   - incidentes
+   - historico del incidente (para trazabilidad)
+   - asignaciones
+   - evidencias
+   - comentarios ?
+
+```mermaid
+erDiagram
+  ZONAS ||--o{ EDIFICIOS : contiene
+  EDIFICIOS ||--o{ BANOS : tiene
+
+  CAT_INCIDENTE_CATEGORIA ||--o{ INCIDENTES : clasifica
+  CAT_INCIDENTE_ESTADO ||--o{ INCIDENTES : estado_actual
+
+  INCIDENTES ||--o{ ASIGNACIONES : genera
+  USUARIOS ||--o{ ASIGNACIONES : atiende
+  USUARIOS ||--o{ ASIGNACIONES : asigna
+
+  ASIGNACIONES ||--o{ EVIDENCIAS : documenta
+
+  INCIDENTES ||--o{ COMENTARIOS : tiene
+  USUARIOS ||--o{ COMENTARIOS : escribe
+
+  INCIDENTES ||--o{ INCIDENTE_ESTADO_HISTORIAL : historial
+  CAT_INCIDENTE_ESTADO ||--o{ INCIDENTE_ESTADO_HISTORIAL : cambia_a
+  USUARIOS ||--o{ INCIDENTE_ESTADO_HISTORIAL : cambia
+
+  ROLES ||--o{ USUARIO_ROL : asigna
+  USUARIOS ||--o{ USUARIO_ROL : tiene
+
+  ZONAS ||--o{ AGENTE_ZONA : cubre
+  USUARIOS ||--o{ AGENTE_ZONA : pertenece
+```

@@ -13,3 +13,15 @@
 * TODO Revisar con Miguel el catalogo de reportes y la estructura de la base de datos
 * TODO Crear el endpoint para la carga de los reportes (con subida de imágenes)
 * TODO Investigar la configuración necesaria para que se tome el SPA como PWA en móvil
+* TODO Agregar meta charset UTF-8 en public/index.html
+* TODO Llenar Open Graph tags en public/index.html
+* TODO Crear manifest.json y vincularlo para soporte PWA
+* TODO Configurar Content Security Policy (CSP)
+* TODO Optimizar carga de router.js (usar defer)
+* TODO Implementar Cache Busting para estilos y scripts (versión en query params o nombre de archivo)
+* TODO Auditoría de Accesibilidad (ARIA labels, colores, navegación por teclado)
+* TODO Crear archivo robots.txt
+* TODO Crear archivo sitemap.xml
+* TODO Validar que todas las imágenes tengan atributo alt
+* TODO Revisar estructura de archivos en Public: mover componentes a carpeta js si son templates puros o mantener en components
+* TODO Documentar motivos de estas mejoras en docs/public_improvements.md
