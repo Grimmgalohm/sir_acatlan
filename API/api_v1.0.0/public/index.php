@@ -8,41 +8,25 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
+use App\Core\Router;
 use App\Core\Request;
 use App\Core\Response;
-use App\Controller\UserController;
 
 // 1. Cargar Contenedor
 $container = require __DIR__ . '/../config/bootstrap.php';
 
-// 2. Inicializar Request
+// 2. Inicializar Request y Router
+$router = new Router($container);
 $request = new Request();
-$path = $request->getPath();
-$method = $request->getMethod();
 
-// 3. Router Simple (Switch)
+
+$router->get('/api/status', function($req) {
+    return Response::json(['status'=>'API Online', 'time' => time()]);
+});
+
+// 3. 
 try {
-    switch ($path) {
-        
-        case '/api/register':
-            if ($method === 'POST') {
-                /** @var UserController $controller */
-                $controller = $container->get(UserController::class);
-                $controller->register($request);
-            } else {
-                Response::json(['error' => 'Método no permitido'], 405);
-            }
-            break;
-
-        case '/api/status':
-            Response::json(['status' => 'API Online', 'time' => time()]);
-            break;
-
-        default:
-            Response::json(['error' => 'Ruta no encontrada'], 404);
-            break;
-    }
-
+    $response = $router->resolve($request);
 } catch (\Exception $e) {
     Response::json(['error' => 'Error interno del servidor: ' . $e->getMessage()], 500);
 }

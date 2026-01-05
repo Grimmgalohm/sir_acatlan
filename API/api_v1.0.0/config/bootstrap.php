@@ -4,9 +4,11 @@ use App\Core\Container;
 use App\Repository\UserRepository;
 use App\Service\UserService;
 use App\Controller\UserController;
+use App\Repository\ReportRepository;
+use App\Service\ReportService;
+use App\Controller\ReportController;
 
 $container = new Container();
-
 
 // 1. La base de datos
 $container->bind(PDO::class, function(){
@@ -29,6 +31,18 @@ $container->bind(UserController::class, function($c){
   return new UserController($c->get(UserService::class));
 });
 
-return $container;
+//REPORT WHIRING
+// 1. La base de datos
+$container->bind(ReportRepository::class, function($c){
+    return new ReportRepository($c->get(PDO::class));
+});
+
+$container->bind(ReportService::class, function($c){
+    return new ReportService($c->get(ReportRepository::class));
+});
+
+$container->bind(ReportController::class, function($c){
+    return new ReportController($c->get(ReportService::class));
+});
 
 ?>

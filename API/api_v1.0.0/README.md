@@ -146,7 +146,7 @@ Resumen:
 4. Ejecución → El código fluye hacia abajo (Controller -> Service -> Repo -> DB).
 5. Respuesta → El resultado sube y Response::json lo envía al usuario.
 
-## ✅ Checklist para agregar una nueva ruta (Sin fallar en el intento)
+## Checklist para agregar una nueva ruta (Sin fallar en el intento)
 
 Sigue este orden estricto para implementar una nueva funcionalidad (ej. `Reports`):
 
@@ -222,3 +222,5 @@ erDiagram
   ZONAS ||--o{ AGENTE_ZONA : cubre
   USUARIOS ||--o{ AGENTE_ZONA : pertenece
 ```
+
+### Nombres de las tablas
