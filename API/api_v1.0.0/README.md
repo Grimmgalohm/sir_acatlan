@@ -1,226 +1,147 @@
-# SIR ACATLÁN - API
-Esta es la documentación de cosas que se me van ocurriendo o que voy recordando sobre la api de SIR Acatlán, en donde intentaré explicar la estructura de la aplicación y darle algún tipo de justificación para que sepas cómo funciona, cómo desplegarla y cómo agregarle cosas a esto.
+# SIR ACATLÁN - API v1.0.0
 
-## Estructura del proyecto
-Se elige esta estructura porque es mantenible, cumple con los criterios de arquitectura limpia. Usa un MVC desacoplado.
-- El index es el unico punto de entrada y aisla del exterior el resto del código
-- Se hace la sanitización de las peticiones en Request
-- Response devuele una respuesta con un formato estandar.
+Esta es la documentación técnica de la API de SIR Acatlán. Aquí encontrarás cómo funciona el núcleo del framework casero, su arquitectura y cómo extenderlo sin romper nada.
+
+## Arquitectura del Proyecto
+
+El sistema utiliza una arquitectura **MVC Modular** con **Inyección de Dependencias** y un **Front Controller**. 
+No usamos frameworks pesados (Laravel/Symfony), sino componentes nativos optimizados.
+
+### Estructura de Directorios
+
 ```
-project-root/
+api_v1.0.0/
 ├─ public/
-│  └─ index.php           # Front controller, única puerta de entrada
-├─ src/
-│  ├─ Core/
-│  │  ├─ Request.php      # Encapsula $_GET/$_POST/headers/body
-│  │  ├─ Response.php     # Construye respuestas JSON
-│  │  └─ Router.php       # Router que envuelve el switch
-│  ├─ Controller/
-│  │  └─ UserController.php
-│  ├─ Service/
-│  │  └─ UserService.php  # Lógica de negocio (reglas, validaciones complejas)
-│  ├─ Repository/
-│  │  └─ UserRepository.php # Acceso a BD con PDO
-│  └─ Model/
-│     └─ User.php         # Entidad/DTO
+│  └─ index.php           # Front Controller. Define las rutas y arranca la app.
 ├─ config/
-│  └─ database.php        # Factoria de PDO o array de config
-├─ storage/
-│  ├─ logs/
-│  └─ cache/
-├─ .env
-├─ .env.example
-├─ composer.json
-└─ vendor/
+│  └─ bootstrap.php       # "Wiring". Configura el contenedor de dependencias.
+├─ src/
+│  ├─ Core/               # El Framework
+│  │  ├─ Router.php       # Enrutador Dinámico (Soporta Regex y Verbos HTTP)
+│  │  ├─ Request.php      # Maneja $_GET, $_POST, Body JSON y Query Params
+│  │  └─ Response.php     # Estandariza respuestas JSON
+│  ├─ Controller/         # Reciben HTTP -> Llaman Servicio -> Retornan JSON
+│  ├─ Service/            # Lógica de Negocio (Validaciones, Reglas)
+│  ├─ Repository/         # Acceso a Datos (SQL / PDO)
+│  └─ Model/              # Entidades / DTOs
+└─ .env                   # Configuración de entorno
 ```
-"Una arquitectura MVC con patrón Front Controller, Capa de Servicios y Repositorio, orquestada mediante Inyección de Dependencias."
 
-Patrones de diseño usados:
-- Front Controller
-- Service Layer Pattern
-Es el patrón que dicta: "Los Controladores deben ser 'flacos' (Thin Controllers) y los Modelos/Servicios 'gordos' (Fat Services)"
-- Repository Pattern
-Abstrae la base de datos
-- Dependency Injection
+---
 
-Uso `Wiring` manual desde un bootstrap
+## El Router Dinámico
 
-## Cómo agregar/quitar funciones
+A diferencia de versiones anteriores, el Router ahora soporta **rutas dinámicas** y **verbos HTTP**.
 
-1. Nivel Base
-Define la estructura de datos. Es un espejo de tu tabla SQL en forma de objeto.
-- Acción: Creas la clase con propiedades públicas en el constructor.
-- Código clave:
+### Definición de Rutas (`public/index.php`)
+
+```php
+// GET simple
+$router->get('/api/status', [StatusController::class, 'check']);
+
+// Rutas con Parámetros ({id})
+$router->get('/api/users/{id}', [UserController::class, 'getOne']);
+$router->put('/api/users/{id}', [UserController::class, 'update']);
+$router->delete('/api/users/{id}', [UserController::class, 'delete']);
+
+// Manejo de Query Params (en el Controlador)
+// URL: /api/users?role=admin
+public function getAll(Request $request) {
+    $role = $request->getQuery('role'); // "admin"
+}
 ```
+
+---
+
+## 🧑‍💻 Guía para Desarrolladores: Creando un Nuevo Módulo
+
+Si quieres agregar una nueva funcionalidad (ej. "Eventos"), sigue el patrón del módulo **Example** incluido en el código.
+
+### Paso 1: El Modelo (`src/Model/Event.php`)
+Define la estructura de tu objeto.
+```php
 namespace App\Model;
-class Report {
+class Event {
     public function __construct(
         public int $id,
-        public string $title,
-        public string $status
+        public string $title
     ) {}
 }
 ```
-2. Nivel Acceso a Datos: El Repositorio (src/Repository/ReportRepository.php)
-Define CÓMO hablar con la base de datos. Aquí va el SQL puro.
-- Requisito: Debe recibir PDO en el constructor.
-- Acción: Creas métodos como save(), findAll().
-- Código clave:
-```
-public function __construct(private \PDO $db) {} // Inyección
-public function save(...) { $stmt = $this->db->prepare(...); }
-```
-3. Nivel Lógica: El Servicio (src/Service/ReportService.php)
-Define las Reglas del Negocio. Aquí validas, calculas o transformas datos.
-- Requisito: Debe recibir el ReportRepository.
-- Acción: Validar que el título no esté vacío, etc., y llamar al repositorio.
-- Código clave:
-```
-public function __construct(private ReportRepository $repo) {}
-public function createReport($data) {
-   // Validaciones...
-   $this->repo->save($data);
+
+### Paso 2: El Repositorio (`src/Repository/EventRepository.php`)
+Encárgate del SQL. Inyecta `PDO` en el constructor.
+```php
+namespace App\Repository;
+class EventRepository {
+    public function __construct(private \PDO $db) {}
+    
+    public function find(int $id) { /* SQL ... */ }
 }
 ```
-4. Nivel HTTP: El Controlador `(src/Controller/ReportController.php)`
-Define la Entrada y Salida. Recibe JSON y devuelve JSON.
-- Requisito: Debe recibir el ReportService.
-- Acción: Leer el Request, llamar al servicio y usar Response::json.
-- Código clave:
-```
-public function __construct(private ReportService $service) {}
-public function create(Request $request) {
-    $data = $request->getBody();
-    $this->service->createReport($data);
-    Response::json(['msg' => 'Creado'], 201);
+
+### Paso 3: El Servicio (`src/Service/EventService.php`)
+Aquí va la lógica. Inyecta el Repositorio.
+```php
+namespace App\Service;
+class EventService {
+    public function __construct(private EventRepository $repo) {}
+    
+    public function getEvent(int $id) {
+        // Valida reglas de negocio aquí
+        return $this->repo->find($id);
+    }
 }
 ```
-El "Wiring" (Conexión): config/bootstrap.php
-Este paso es vital. PHP no sabe que creaste esos archivos hasta que los registras en tu Contenedor de Dependencias. Debes "enseñarle" al contenedor cómo armar la muñeca rusa.
-Agregas esto al final de tus binds existentes:
+
+### Paso 4: El Controlador (`src/Controller/EventController.php`)
+Recibe HTTP, devuelve JSON. Inyecta el Servicio.
+```php
+namespace App\Controller;
+class EventController {
+    public function __construct(private EventService $service) {}
+
+    public function getOne(Request $request, $id) {
+        $data = $this->service->getEvent($id);
+        Response::json($data);
+    }
+}
 ```
-// 1. El Repo necesita PDO (que ya registraste antes)
-$container->bind(ReportRepository::class, function($c) {
-    return new ReportRepository($c->get(PDO::class));
+
+### Paso 5: El Wiring (`config/bootstrap.php`)
+**CRÍTICO:** Debes registrar tus clases en el contenedor de dependencias para que el Router pueda construirlas automáticamente.
+
+```php
+// ... en config/bootstrap.php
+
+// 1. Registrar Repo
+$container->bind(EventRepository::class, function($c){
+    return new EventRepository($c->get(\PDO::class));
 });
 
-// 2. El Servicio necesita el Repo
-$container->bind(ReportService::class, function($c) {
-    return new ReportService($c->get(ReportRepository::class));
+// 2. Registrar Servicio
+$container->bind(EventService::class, function($c){
+    return new EventService($c->get(EventRepository::class));
 });
 
-// 3. El Controlador necesita el Servicio
-$container->bind(ReportController::class, function($c) {
-    return new ReportController($c->get(ReportService::class));
+// 3. Registrar Controlador
+$container->bind(EventController::class, function($c){
+    return new EventController($c->get(EventService::class));
 });
 ```
-El Switch (La Ruta): public/index.php
-Finalmente, expones la funcionalidad al mundo. Agregas un nuevo case en tu switch principal.
-Ubicación: Dentro del bloque `try { switch ($path) { ... } }`.
-```
-// ... otros casos ...
 
-    case '/api/reports':
-        // A. Si quieren CREAR (POST)
-        if ($method === 'POST') {
-            // Pedimos el controlador YA ARMADO al contenedor
-            $controller = $container->get(ReportController::class);
-            $controller->create($request);
-        }
-        // B. Si quieren LEER (GET) - Opcional
-        elseif ($method === 'GET') {
-            $controller = $container->get(ReportController::class);
-            $controller->getAll($request);
-        }
-        else {
-            Response::json(['error' => 'Método no permitido'], 405);
-        }
-        break;
+### Paso 6: La Ruta (`public/index.php`)
+Finalmente, expón tu endpoint.
 
-    // ... default ...
-```
-Resumen:
-1. Request llega a index.php → Entra al switch.
-2. Switch pide Controller → Llama al Container.
-3. Container arma todo → Controller + Service + Repo + PDO.
-4. Ejecución → El código fluye hacia abajo (Controller -> Service -> Repo -> DB).
-5. Respuesta → El resultado sube y Response::json lo envía al usuario.
-
-## Checklist para agregar una nueva ruta (Sin fallar en el intento)
-
-Sigue este orden estricto para implementar una nueva funcionalidad (ej. `Reports`):
-
-1.  [ ] **Nivel Base (Model)**: Crea `src/Model/Report.php`. Define propiedades públicas y constructor.
-2.  [ ] **Nivel Datos (Repository)**: Crea `src/Repository/ReportRepository.php`.
-    *   [ ] Inyecta `PDO` en el constructor.
-    *   [ ] Crea métodos SQL (`save`, `findById`, etc.).
-3.  [ ] **Nivel Lógica (Service)**: Crea `src/Service/ReportService.php`.
-    *   [ ] Inyecta `ReportRepository` en el constructor.
-    *   [ ] Agrega validaciones y lógica de negocio.
-4.  [ ] **Nivel HTTP (Controller)**: Crea `src/Controller/ReportController.php`.
-    *   [ ] Inyecta `ReportService` en el constructor.
-    *   [ ] Crea métodos que reciban `Request` y retornen `Response::json`.
-5.  [ ] **Wiring (Bootstrap)**: Edita `config/bootstrap.php`.
-    *   [ ] Registra `ReportRepository` (pasa `PDO`).
-    *   [ ] Registra `ReportService` (pasa `ReportRepository`).
-    *   [ ] Registra `ReportController` (pasa `ReportService`).
-6.  [ ] **Routing (Index)**: Edita `public/index.php`.
-    *   [ ] Agrega un nuevo `case '/api/reports':` dentro del switch.
-    *   [ ] Obtén el controlador desde el container: `$container->get(ReportController::class)`.
-    *   [ ] Llama al método según el verbo HTTP (`POST`, `GET`, etc.).
-
-## Base de datos... (ptm)
-Dado que al final nadie me pasó los catalogos de baños en la FES, me voy a inventar el cómo funciona para este MVP la relación de las bases de datos.
-¿Cuáles son los datos? Bueno, creo que vamos a ir desmenuzandolos poco a poco.
-
-1. Catalogos
-   - Baños
-   - Edificios
-   - Zonas
-   - categoria de incidencia
-   - estado del incidente
-   - estado de la asignación (nuevo, asignado... para admnins o tracking de folio)
-   - resultado de la asignación
-
-2. Identidad y permisos
-   - usuarios
-   - roles
-   - relacion de usuarios v roles
-   - zona del agente (?) si se llega a implementar... no c.
-
-3. Operación
-   - incidentes
-   - historico del incidente (para trazabilidad)
-   - asignaciones
-   - evidencias
-   - comentarios ?
-
-```mermaid
-erDiagram
-  ZONAS ||--o{ EDIFICIOS : contiene
-  EDIFICIOS ||--o{ BANOS : tiene
-
-  CAT_INCIDENTE_CATEGORIA ||--o{ INCIDENTES : clasifica
-  CAT_INCIDENTE_ESTADO ||--o{ INCIDENTES : estado_actual
-
-  INCIDENTES ||--o{ ASIGNACIONES : genera
-  USUARIOS ||--o{ ASIGNACIONES : atiende
-  USUARIOS ||--o{ ASIGNACIONES : asigna
-
-  ASIGNACIONES ||--o{ EVIDENCIAS : documenta
-
-  INCIDENTES ||--o{ COMENTARIOS : tiene
-  USUARIOS ||--o{ COMENTARIOS : escribe
-
-  INCIDENTES ||--o{ INCIDENTE_ESTADO_HISTORIAL : historial
-  CAT_INCIDENTE_ESTADO ||--o{ INCIDENTE_ESTADO_HISTORIAL : cambia_a
-  USUARIOS ||--o{ INCIDENTE_ESTADO_HISTORIAL : cambia
-
-  ROLES ||--o{ USUARIO_ROL : asigna
-  USUARIOS ||--o{ USUARIO_ROL : tiene
-
-  ZONAS ||--o{ AGENTE_ZONA : cubre
-  USUARIOS ||--o{ AGENTE_ZONA : pertenece
+```php
+$router->get('/api/events/{id}', [App\Controller\EventController::class, 'getOne']);
 ```
 
-### Nombres de las tablas
+---
+
+## Instalación
+
+1.  `cd API/api_v1.0.0`
+2.  `composer install`
+3.  Copia `.env.example` a `.env` y configura la BD.
+4.  Levanta el server: `php -S localhost:8000 -t public`

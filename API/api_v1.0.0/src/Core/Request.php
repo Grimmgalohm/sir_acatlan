@@ -19,6 +19,13 @@ class Request {
         }
         return $data;
     }
+
+    public function getQuery(string $key = null): mixed {
+        if ($key === null) {
+            return $_GET;
+        }
+        return $_GET[$key] ?? null;
+    }
 }
 
 ?>

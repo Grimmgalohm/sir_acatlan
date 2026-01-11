@@ -45,4 +45,19 @@ $container->bind(ReportController::class, function($c){
     return new ReportController($c->get(ReportService::class));
 });
 
+// EXAMPLE MODULE WIRING (Nuevo Módulo de Ejemplo)
+$container->bind(App\Repository\ExampleRepository::class, function($c){
+    return new App\Repository\ExampleRepository($c->get(PDO::class));
+});
+
+$container->bind(App\Service\ExampleService::class, function($c){
+    return new App\Service\ExampleService($c->get(App\Repository\ExampleRepository::class));
+});
+
+$container->bind(App\Controller\ExampleController::class, function($c){
+    return new App\Controller\ExampleController($c->get(App\Service\ExampleService::class));
+});
+
+
+return $container;
 ?>

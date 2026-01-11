@@ -24,7 +24,12 @@ $router->get('/api/status', function($req) {
     return Response::json(['status'=>'API Online', 'time' => time()]);
 });
 
-// 3. 
+// Rutas de Ejemplo (Dinámicas)
+$router->get('/api/examples/{id}', [App\Controller\ExampleController::class, 'getOne']);
+$router->put('/api/examples/{id}', [App\Controller\ExampleController::class, 'update']);
+$router->delete('/api/examples/{id}', [App\Controller\ExampleController::class, 'delete']);
+
+// 3.  
 try {
     $response = $router->resolve($request);
 } catch (\Exception $e) {
