@@ -1,12 +1,18 @@
 <?php
-
 use App\Core\Container;
+
 use App\Repository\UserRepository;
 use App\Service\UserService;
 use App\Controller\UserController;
+
 use App\Repository\ReportRepository;
 use App\Service\ReportService;
 use App\Controller\ReportController;
+
+use App\Repository\IncidentRepository;
+use App\Service\IncidentService;
+use App\Controller\IncidentController;
+
 
 $container = new Container();
 
@@ -45,18 +51,32 @@ $container->bind(ReportController::class, function($c){
     return new ReportController($c->get(ReportService::class));
 });
 
+//INCIDENT WHIRING
+// 1. La base de datos
+$container->bind(IncidentRepository::class, function($c){
+    return new IncidentRepository($c->get(PDO::class));
+});
+
+$container->bind(IncidentService::class, function($c){
+    return new IncidentService($c->get(IncidentRepository::class));
+});
+
+$container->bind(IncidentController::class, function($c){
+    return new IncidentController($c->get(IncidentService::class));
+});
+
 // EXAMPLE MODULE WIRING (Nuevo Módulo de Ejemplo)
-$container->bind(App\Repository\ExampleRepository::class, function($c){
-    return new App\Repository\ExampleRepository($c->get(PDO::class));
-});
+// $container->bind(App\Repository\ExampleRepository::class, function($c){
+//     return new App\Repository\ExampleRepository($c->get(PDO::class));
+// });
 
-$container->bind(App\Service\ExampleService::class, function($c){
-    return new App\Service\ExampleService($c->get(App\Repository\ExampleRepository::class));
-});
+// $container->bind(App\Service\ExampleService::class, function($c){
+//     return new App\Service\ExampleService($c->get(App\Repository\ExampleRepository::class));
+// });
 
-$container->bind(App\Controller\ExampleController::class, function($c){
-    return new App\Controller\ExampleController($c->get(App\Service\ExampleService::class));
-});
+// $container->bind(App\Controller\ExampleController::class, function($c){
+//     return new App\Controller\ExampleController($c->get(App\Service\ExampleService::class));
+// });
 
 
 return $container;

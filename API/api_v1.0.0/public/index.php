@@ -25,9 +25,11 @@ $router->get('/api/status', function($req) {
 });
 
 // Rutas de Ejemplo (Dinámicas)
-$router->get('/api/examples/{id}', [App\Controller\ExampleController::class, 'getOne']);
-$router->put('/api/examples/{id}', [App\Controller\ExampleController::class, 'update']);
-$router->delete('/api/examples/{id}', [App\Controller\ExampleController::class, 'delete']);
+// $router->get('/api/examples/{id}', [App\Controller\ExampleController::class, 'getOne']);
+// $router->put('/api/examples/{id}', [App\Controller\ExampleController::class, 'update']);
+// $router->delete('/api/examples/{id}', [App\Controller\ExampleController::class, 'delete']);
+
+$router->get('/api/incident', [App\Controller\IncidentController::class, 'getMetadata']);
 
 // 3.  
 try {
