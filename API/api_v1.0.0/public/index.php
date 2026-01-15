@@ -29,7 +29,7 @@ $router->get('/api/status', function($req) {
 // $router->put('/api/examples/{id}', [App\Controller\ExampleController::class, 'update']);
 // $router->delete('/api/examples/{id}', [App\Controller\ExampleController::class, 'delete']);
 
-$router->get('/api/incident', [App\Controller\IncidentController::class, 'getMetadata']);
+$router->get('/api/metadata', [App\Controller\IncidentController::class, 'getMetadata']);
 
 // 3.  
 try {

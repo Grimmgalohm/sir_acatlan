@@ -4,7 +4,6 @@
 * Version: v1.0.0
 */
 
-// Usamos la función env() en lugar de $_ENV directo
 $host = $_ENV['DB_HOST'];
 $db   = $_ENV['DB_NAME'];
 $port = $_ENV['DB_PORT'];

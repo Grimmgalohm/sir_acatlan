@@ -7,39 +7,39 @@
 console.log("Welcome to SIR");
 
 const routes = {
-    '/': '/components/home.html',
-    '/login': '/components/login.html',
-    '/report_form': '/components/report_form.html',
-    '/search-report': '/components/search_report.html'
+  '/': '/components/home.html',
+  '/login': '/components/login.html',
+  '/report_form': '/components/report_form.html',
+  '/search-report': '/components/search_report.html'
 };
 
-async function loadRoute(route){
-    const path = routes[route] || routes['404'];
+async function loadRoute(route) {
+  const path = routes[route] || routes['404'];
 
-    try{
-	const response = await fetch(path);
-	if(!response.ok) throw new Error('No se pudo cargar la vista');
-	const html = await response.text();
+  try {
+    const response = await fetch(path);
+    if (!response.ok) throw new Error('No se pudo cargar la vista');
+    const html = await response.text();
 
-	const app = document.getElementById('app');
-	app.innerHTML = html;
+    const app = document.getElementById('app');
+    app.innerHTML = html;
 
-	initView(route);
-    }catch (err) {
-	console.error(err);
-	document.getElementById('app').innerHTML = `<section><h1>Error</h1><p>No se pudo cargar la vista.</p></section>`;
-    }
+    initView(route);
+  } catch (err) {
+    console.error(err);
+    document.getElementById('app').innerHTML = `<section><h1>Error</h1><p>No se pudo cargar la vista.</p></section>`;
+  }
 }
 
-function getCurrentRoute(){
-    const hash = window.location.hash || '#/';
-    const route = hash.replace('#', '');
-    return route;
+function getCurrentRoute() {
+  const hash = window.location.hash || '#/';
+  const route = hash.replace('#', '');
+  return route;
 }
 
-function handleRouteChange(){
-    const route = getCurrentRoute();
-    loadRoute(route);
+function handleRouteChange() {
+  const route = getCurrentRoute();
+  loadRoute(route);
 }
 
 window.addEventListener('hashchange', handleRouteChange);
@@ -58,7 +58,18 @@ function initView(route) {
         // aquí luego conectas con tu API
       });
     }
+  } else if (route === '/report_form') {
+    async function getMetadata() {
+      const url = 'http://127.0.0.1:8080/api/metadata';
+      try {
+        const response = await fetch(url);
+        const dta = await response.json();
+        console.log(dta);
+      } catch (error) {
+        console.error("falló!", error);
+      }
+    }
+    getMetadata();
   }
-
   // if (route === '/otra-ruta') { ... }
 }

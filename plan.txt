@@ -1,0 +1,43 @@
+PLAN DE CRECIMIENTO: SIR ACATLAN FRONTEND (PASO POR PASO)
+==========================================================
+
+Este plan busca transformar el frontend actual en una aplicación profesional, escalable y fácil de entender, siguiendo principios SOLID y Clean Code.
+
+FASE 1: INFRAESTRUCTURA Y ESTANDARIZACIÓN
+-----------------------------------------
+1. Estandarización de Componentes HTML:
+   - Modificar 'public/components/report_form.html' para agregar atributos 'id' y 'name' únicos a cada campo (edificios, baños, comentario, etc.).
+   - Asegurar que 'public/components/login.html' tenga identificadores claros.
+
+2. Creación del ApiService (Principio de Responsabilidad Única):
+   - Crear un archivo 'public/js/services/ApiService.js'.
+   - Este servicio centralizará todas las peticiones fetch, manejo de errores y configuración de la URL base.
+
+FASE 2: GESTIÓN DE METADATA (DINÁMICA Y SEGURA)
+----------------------------------------------
+3. Implementación del MetadataService:
+   - Crear 'public/js/services/MetadataService.js'.
+   - Método 'getReportMetadata()': Intentará cargar datos de '/api/metadata'.
+   - Fallback (Contingencia): Si la API falla, el servicio debe retornar un set de datos "por defecto" para que la app no se rompa.
+
+4. Carga de Opciones en el Formulario:
+   - Al entrar a la ruta '#/report_form', invocar al MetadataService.
+   - Poblar los 'select' de edificios, tipos de incidente y baños dinámicamente usando JS limpio (document.createElement o templates).
+
+FASE 3: ENVÍO DE INFORMACIÓN (FORM SUBMISSION)
+----------------------------------------------
+5. Modularización de Vistas (Open/Closed Principle):
+   - Crear manejadores específicos para cada vista, por ejemplo 'ReportView.js' y 'LoginView.js'.
+   - Sacar la lógica pesada de 'router.js' para que este solo se encargue de "qué cargar" y no de "cómo funciona lo que cargó".
+
+6. Implementación de Métodos de Envío:
+   - Capturar el evento 'submit' de ambos formularios.
+   - Usar el objeto FormData para extraer los datos de forma limpia.
+   - Enviar la información al ApiService (Reporte -> POST /api/reports, Login -> POST /api/login).
+   - Manejar las respuestas de éxito/error con notificaciones al usuario.
+
+PRINCIPIOS APLICADOS
+--------------------
+- SOLID (S): Cada archivo tendrá una sola razón para cambiar (Datos, UI o Rutas).
+- SOLID (O): El sistema de rutas será extensible; agregar una nueva vista no requerirá modificar la lógica de las existentes.
+- Clean Code: Nombres descriptivos, funciones pequeñas y separación clara entre el HTML, la lógica de negocio y el transporte de datos.

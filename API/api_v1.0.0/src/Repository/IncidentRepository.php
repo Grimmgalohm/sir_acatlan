@@ -3,7 +3,7 @@ namespace App\Repository;
 
 use PDO;
 use App\Model\Incident;
-use App\Model\Bano;
+use App\Model\Toilet;
 use App\Model\CategoryIncident;
 use App\Model\Buildings;
 use App\Model\Metadata;
@@ -13,78 +13,84 @@ class IncidentRepository {
 
     public function __construct(private PDO $db) {}
 
-    private function get_incidents_cat(): ?CategoryIncident {
+    private function get_incidents_cat(): ?array {
         
         $stmt = $this->db->prepare("SELECT `id`, `clave`, `nombre_es`, `descripcion` FROM siracatlan.cat_incidente_categoria WHERE activo = 1");
-        $stmt->execute();
-        
-        $data = $stmt->fetch();
+        $stmt->execute();        
+        $data = $stmt->fetchAll();
 
         if(!$data) {
             return null;
         }
         
-        return new CategoryIncident(
-            $data['id'],
-            $data['clave'],
-            $data['nombre_es'],
-            $data['descripcion']
+        return array_map(
+            fn(array $row) => CategoryIncident::fromIncidentCat($row),
+            $data
         );
             
     }
 
-    private function get_banos_list(): ?Bano {
+    private function get_toilet_list(): ?array {
         
-        $stmt = $this->db->prepare("SELECT id, tipo, codigo_interno, activo FROM siracatlan.banos WHERE activo = 1");
+        $stmt = $this->db->prepare("SELECT * FROM siracatlan.banos WHERE activo = 1");
         $stmt->execute();
-        $data = $stmt->fetch();
+        $data = $stmt->fetchAll();
+
+        if(!$data) {
+            return null;
+        }
+
+        return array_map(
+            fn(array $row) => Toilet::fromToilet($row),
+            $data
+        );
         
-        return new Bano(
-            $data['id'],
-            $data['tipo'],
-            $data['codigo_interno'],
-            $data['activo']
+    }
+
+    private function get_building_list(): ?array {
+        
+        $stmt = $this->db->prepare("SELECT * FROM siracatlan.edificios");
+        $stmt->execute();
+        $data = $stmt->fetchAll();
+
+        if(!$data) {
+            return null;
+        }
+        
+        return array_map(
+            fn(array $row)=> Buildings::fromBuildings($row),
+            $data
         );
     }
 
-    private function get_edificios_list(): ?Buildings {
-        
-        $stmt = $this->db->prepare("SELECT id, codigo, nombre FROM siracatlan.edificios");
-        $stmt->execute();
-        $data = $stmt->fetch();
-
-        return new Buildings(
-            $data['id'],
-            $data['codigo'],
-            $data['nombre']
-        );
-    }
-
-    private function get_zonas_list(): ?Zones {
+    private function get_zones_list(): ?array {
 
         $stmt = $this->db->prepare("SELECT * FROM siracatlan.zonas");
         $stmt->execute();
-        $data = $stmt->fetch();
+        $data = $stmt->fetchAll();
+
+        if(!$data) {
+            return null;
+        }
         
-        return new Zones(
-            $data['id'],
-            $data['nombre'],
-            $data['descripcion']
+        return array_map(
+            fn(array $row)=> Zones::fromZones($row),
+            $data
         );
     }
     
     public function metadata(): ?Metadata {
 
         $incidents_cat = $this->get_incidents_cat();
-        $lista_banos = $this->get_banos_list();
-        $lista_edificios = $this->get_edificios_list();
-        $lista_zonas = $this->get_zonas_list();
+        $toilet_list = $this->get_toilet_list();
+        $building_list = $this->get_building_list();
+        $zone_list = $this->get_zones_list();
         
         return new Metadata(
             $incidents_cat,
-            $lista_banos,
-            $lista_edificios,
-            $lista_zonas
+            $toilet_list,
+            $building_list,
+            $zone_list
         );
     }
 
