@@ -1,8 +1,8 @@
-<form>
+<form id="incident_form">
   <fieldset><legend>Reportar incidente</legend>
     
     <label>Selecciona el tipo de inicidente:
-      <select id="type_incident">
+      <select id="incidents">
 	<option disabled selected value> -- select an option -- </option>
 	<option value="1">Baño sucio</option>
 	<option value="2">Sin papel</option>
@@ -12,7 +12,7 @@
     </label>
 
     <label>Selecciona el edificio
-      <select>
+      <select id="buildings">
 	<option disabled selected value> -- select an option -- </option>
 	<option value="1">A1</option>
 	<option value="2">A2</option>
@@ -21,7 +21,7 @@
     </label>
 
     <label>Selecciona el baño
-      <select>
+      <select id="toilets">
 	<option disabled selected value> -- Selecciona una opción -- </option>
 	<option value="1">Hombres</option>
 	<option value="2">Mujeres</option>
@@ -32,9 +32,9 @@
   
   <br>
   <fieldset>
-    <input type="file" accept="image/*" capture="enviroment">
+    <input id="fileattached" type="file" accept="image/*" capture="enviroment">
     <label>Agrega un comentario
-      <textarea></textarea>
+      <textarea id="comments"></textarea>
     </label>
   </fieldset>
     <button>Enviar reporte</button>

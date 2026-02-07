@@ -3,8 +3,12 @@
   Author: César Luna
   Version: 1.0.0
  */
+import { metadata } from './services/metadata.js';
+const md = metadata.getAll();
 
-console.log("Welcome to SIR");
+console.log(md);
+console.log("[INFO] Welcome to SIR Acatlán");
+console.log("[INFO] Si te solicitan pegar algo en consola, cuidado. Te están timando.");
 
 const routes = {
   '/': '/components/home.html',
@@ -59,17 +63,7 @@ function initView(route) {
       });
     }
   } else if (route === '/report_form') {
-    async function getMetadata() {
-      const url = 'http://127.0.0.1:8080/api/metadata';
-      try {
-        const response = await fetch(url);
-        const dta = await response.json();
-        console.log(dta);
-      } catch (error) {
-        console.error("falló!", error);
-      }
-    }
-    getMetadata();
+      
   }
   // if (route === '/otra-ruta') { ... }
 }

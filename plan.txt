@@ -6,18 +6,18 @@ Este plan busca transformar el frontend actual en una aplicación profesional, e
 FASE 1: INFRAESTRUCTURA Y ESTANDARIZACIÓN
 -----------------------------------------
 1. Estandarización de Componentes HTML:
-   - Modificar 'public/components/report_form.html' para agregar atributos 'id' y 'name' únicos a cada campo (edificios, baños, comentario, etc.).
-   - Asegurar que 'public/components/login.html' tenga identificadores claros.
+   - Modificar 'public/components/report_form.html' para agregar atributos 'id' y 'name' únicos a cada campo (edificios, baños, comentario, etc.). [OK]
+   - Asegurar que 'public/components/login.html' tenga identificadores claros. [OK]
 
 2. Creación del ApiService (Principio de Responsabilidad Única):
-   - Crear un archivo 'public/js/services/ApiService.js'.
-   - Este servicio centralizará todas las peticiones fetch, manejo de errores y configuración de la URL base.
+   - Crear un archivo 'public/js/services/ApiService.js'. [OK]
+   - Este servicio centralizará todas las peticiones fetch, manejo de errores y configuración de la URL base. [OK]
 
 FASE 2: GESTIÓN DE METADATA (DINÁMICA Y SEGURA)
 ----------------------------------------------
 3. Implementación del MetadataService:
-   - Crear 'public/js/services/MetadataService.js'.
-   - Método 'getReportMetadata()': Intentará cargar datos de '/api/metadata'.
+   - Crear 'public/js/services/MetadataService.js'. [OK]
+   - Método 'getReportMetadata()': Intentará cargar datos de '/api/metadata'. [IN PROGRESS]
    - Fallback (Contingencia): Si la API falla, el servicio debe retornar un set de datos "por defecto" para que la app no se rompa.
 
 4. Carga de Opciones en el Formulario:
