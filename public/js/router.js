@@ -4,7 +4,7 @@
   Version: 1.0.0
  */
 import { metadata } from "./services/metadata.js";
-const md = metadata.getAll();
+const integralMetadata = metadata.getAll();
 
 console.log("[INFO] Welcome to SIR Acatlán");
 console.log(
@@ -66,11 +66,6 @@ function initView(route) {
 		}
 	} else if (route === "/report_form") {
 		// TODO: hacer el ejercicio de insertar las opciones dinamicamente obteniendolas de la variable global de metadata
-		const form = document.getElementById("incident-form");
-		const incidentList = document.getElementById("incidents");
-		const option = document.createElement("option");
-		option.new;
-		incidentList.appendChild(option);
 	}
 	// if (route === '/otra-ruta') { ... }
 }
