@@ -3,11 +3,10 @@
   Author: César Luna
   Version: 1.0.0
  */
-import { metadata } from "./services/metadata.js";
-const integralMetadata = metadata.getAll();
+import { Store } from "./store.js";
 
-console.log("[INFO] Welcome to SIR Acatlán");
-console.log(
+console.info("[INFO] Welcome to SIR Acatlán");
+console.info(
 	"[INFO] Si te solicitan pegar algo en consola, cuidado. Te están timando.",
 );
 
@@ -19,22 +18,28 @@ const routes = {
 };
 
 async function loadRoute(route) {
-	const path = routes[route] || routes["404"];
+    const path = routes[route] || routes["404"];
+    
+    try {
+	
+	await Store.fetchMetadata;
+	
+	const response = await fetch(path);
 
-	try {
-		const response = await fetch(path);
-		if (!response.ok) throw new Error("No se pudo cargar la vista");
-		const html = await response.text();
+	if (!response.ok) throw new Error("No se pudo cargar la vista");
 
-		const app = document.getElementById("app");
-		app.innerHTML = html;
+	const html = await response.text();
 
-		initView(route);
-	} catch (err) {
-		console.error(err);
-		document.getElementById("app").innerHTML =
-			`<section><h1>Error</h1><p>No se pudo cargar la vista.</p></section>`;
-	}
+	const app = document.getElementById("app");
+
+	app.innerHTML = html;
+
+	initView(route, Store.data);
+    } catch (err) {
+	console.error(err);
+	document.getElementById("app").innerHTML =
+	    `<section><h1>Error</h1><p>No se pudo cargar la vista.</p></section>`;
+    }
 }
 
 function getCurrentRoute() {
@@ -51,7 +56,8 @@ function handleRouteChange() {
 window.addEventListener("hashchange", handleRouteChange);
 window.addEventListener("DOMContentLoaded", handleRouteChange);
 
-function initView(route) {
+function initView(route, metadata) {
+    console.log(metadata);
 	if (route === "/login") {
 		const form = document.getElementById("login-form");
 		if (form) {
@@ -65,7 +71,17 @@ function initView(route) {
 			});
 		}
 	} else if (route === "/report_form") {
-		// TODO: hacer el ejercicio de insertar las opciones dinamicamente obteniendolas de la variable global de metadata
+	    // TODO: hacer el ejercicio de insertar las opciones dinamicamente obteniendolas de la variable global de metadata
+	    // Me cago en tus muertos, tengo que hacer un store para almacenar la info de forma global :v
 	}
 	// if (route === '/otra-ruta') { ... }
 }
+
+
+
+
+
+
+
+
+
