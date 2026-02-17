@@ -29,9 +29,10 @@ export class ApiService {
 					data: errorData,
 				};
 			}
-		    
+
 			if (response.status === 204) return null;
-		        return await response.json();} catch (error) {
+			return await response.json();
+		} catch (error) {
 			console.error(`[Api Error] ${error.status}: ${error.message}`);
 			throw error;
 		}

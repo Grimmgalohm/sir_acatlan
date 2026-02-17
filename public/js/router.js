@@ -18,28 +18,25 @@ const routes = {
 };
 
 async function loadRoute(route) {
-    const path = routes[route] || routes["404"];
-    
-    try {
-	
-	await Store.fetchMetadata;
-	
-	const response = await fetch(path);
+	const path = routes[route] || routes["404"];
 
-	if (!response.ok) throw new Error("No se pudo cargar la vista");
+	try {
+		const metadata = await Store.fetchMetadata();
+		const response = await fetch(path);
+		console.info(metadata);
+		if (!response.ok) throw new Error("No se pudo cargar la vista");
 
-	const html = await response.text();
+		const html = await response.text();
+		const app = document.getElementById("app");
 
-	const app = document.getElementById("app");
+		app.innerHTML = html;
 
-	app.innerHTML = html;
-
-	initView(route, Store.data);
-    } catch (err) {
-	console.error(err);
-	document.getElementById("app").innerHTML =
-	    `<section><h1>Error</h1><p>No se pudo cargar la vista.</p></section>`;
-    }
+		initView(route, metadata);
+	} catch (err) {
+		console.error(err);
+		document.getElementById("app").innerHTML =
+			`<section><h1>Error</h1><p>No se pudo cargar la vista.</p></section>`;
+	}
 }
 
 function getCurrentRoute() {
@@ -57,7 +54,7 @@ window.addEventListener("hashchange", handleRouteChange);
 window.addEventListener("DOMContentLoaded", handleRouteChange);
 
 function initView(route, metadata) {
-    console.log(metadata);
+	console.log(metadata);
 	if (route === "/login") {
 		const form = document.getElementById("login-form");
 		if (form) {
@@ -71,17 +68,8 @@ function initView(route, metadata) {
 			});
 		}
 	} else if (route === "/report_form") {
-	    // TODO: hacer el ejercicio de insertar las opciones dinamicamente obteniendolas de la variable global de metadata
-	    // Me cago en tus muertos, tengo que hacer un store para almacenar la info de forma global :v
+		// TODO: hacer el ejercicio de insertar las opciones dinamicamente obteniendolas de la variable global de metadata
+		// Me cago en tus muertos, tengo que hacer un store para almacenar la info de forma global :v
 	}
 	// if (route === '/otra-ruta') { ... }
 }
-
-
-
-
-
-
-
-
-
