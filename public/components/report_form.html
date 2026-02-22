@@ -1,41 +1,49 @@
 <form id="incident_form">
-  <fieldset><legend>Reportar incidente</legend>
-    
-    <label>Selecciona el tipo de inicidente:
+  <fieldset>
+    <legend>Reportar incidente</legend>
+
+    <label
+      >Selecciona el tipo de inicidente:
       <select id="incidents">
-	<option disabled selected value> -- select an option -- </option>
-	<option value="1">Baño sucio</option>
-	<option value="2">Sin papel</option>
-	<option value="3">Sin jabón</option>
-	<option value="4">Baño cerrado</option>
+        <option disabled selected value>-- select an option --</option>
       </select>
     </label>
-
-    <label>Selecciona el edificio
+    <span id="incident-desc"></span>
+    <label
+      >Selecciona el edificio
       <select id="buildings">
-	<option disabled selected value> -- select an option -- </option>
-	<option value="1">A1</option>
-	<option value="2">A2</option>
-	<option value="3">A3</option>
+        <option disabled selected value>-- select an option --</option>
       </select>
     </label>
 
-    <label>Selecciona el baño
+    <label
+      >Selecciona la zona
+      <select id="zone">
+        <option disabled selected value>-- select an option --</option>
+      </select>
+    </label>
+    <span id="zone-desc"></span>
+
+    <label
+      >Selecciona el baño
       <select id="toilets">
-	<option disabled selected value> -- Selecciona una opción -- </option>
-	<option value="1">Hombres</option>
-	<option value="2">Mujeres</option>
-	<option value="3">Mixto</option>
+        <option disabled selected value>-- Selecciona una opción --</option>
       </select>
     </label>
   </fieldset>
-  
-  <br>
+
+  <br />
   <fieldset>
-    <input id="fileattached" type="file" accept="image/*" capture="enviroment">
-    <label>Agrega un comentario
+    <input
+      id="fileattached"
+      type="file"
+      accept="image/*"
+      capture="enviroment"
+    />
+    <label
+      >Agrega un comentario
       <textarea id="comments"></textarea>
     </label>
   </fieldset>
-    <button>Enviar reporte</button>
+  <button>Enviar reporte</button>
 </form>

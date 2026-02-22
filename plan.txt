@@ -17,12 +17,12 @@ FASE 2: GESTIÓN DE METADATA (DINÁMICA Y SEGURA)
 ----------------------------------------------
 3. Implementación del MetadataService:
    - Crear 'public/js/services/MetadataService.js'. [OK]
-   - Método 'getReportMetadata()': Intentará cargar datos de '/api/metadata'. [IN PROGRESS]
-   - Fallback (Contingencia): Si la API falla, el servicio debe retornar un set de datos "por defecto" para que la app no se rompa.
+   - Método 'getReportMetadata()': Intentará cargar datos de '/api/metadata'. [OK]
+   - Fallback (Contingencia): Si la API falla, el servicio debe retornar un set de datos "por defecto" para que la app no se rompa. [NOT YET THINKED]
 
 4. Carga de Opciones en el Formulario:
-   - Al entrar a la ruta '#/report_form', invocar al MetadataService.
-   - Poblar los 'select' de edificios, tipos de incidente y baños dinámicamente usando JS limpio (document.createElement o templates).
+   - Al entrar a la ruta '#/report_form', invocar al MetadataService. [OK] | Store has been implemented to load data dinamically 
+   - Poblar los 'select' de edificios, tipos de incidente y baños dinámicamente usando JS limpio (document.createElement o templates). [OK]
 
 FASE 3: ENVÍO DE INFORMACIÓN (FORM SUBMISSION)
 ----------------------------------------------
